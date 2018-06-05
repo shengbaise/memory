@@ -84,7 +84,8 @@
 				isShowBlock: true,
 				allCount: 0,
 				score: 0,
-				time: 60
+				time: 60,
+				isBegin: false
 			}
 		},
 		filters: {
@@ -102,7 +103,7 @@
 		},
 		computed: {
 			canClick () {
-				return this.count < 2
+				return this.count < 2 && this.isBegin
 			},
 			isOver () {
 				return this.allCount === 12 || this.time === 0
@@ -143,22 +144,24 @@
 								this.count = 0
 							}, 3000)
 						}
-						
 					}
 				}
 			},
 			setTime() {
-			  if (this.time == 0) {
-			   // this.time = 60
-			  } else {
-			   this.time--
-			   setTimeout(() => {
-			    this.setTime()
-			   },
-			   1000)
-			  }
+				if (this.allCount < 12) {
+					if (this.time == 0) {
+				   // this.time = 60
+				  } else {
+				   this.time--
+				   setTimeout(() => {
+				    this.setTime()
+				   },
+				   1000)
+				  }
+				}
 		  },
 		  ok () {
+		  	this.isBegin = false
 		  	this.time = 60
 		  	this.allCount = 0
 		  	this.score = 0
@@ -166,11 +169,11 @@
 		  		v.isShow = false,
 					v.isShowBlock = true
 		  	})
-		  	// this.init()
 		  },
 		  init () {
 		  	this.reset()
 			  this.setTime()
+			  this.isBegin = true
 		  }
 		}
 	}
