@@ -1,0 +1,37 @@
+记忆小游戏设计思路：
+1.设计数据结构：
+  blocks：遍历实现12个块在页面上的显示
+  count: 通过计数用来控制页面上的块是否能点击
+  firstBlock: 保存第一个点击的块
+  currentBlock: 保存第二个被点击的块
+  isShowBlock: 控制两个正面朝上颜色相同的块的消除
+  allCount: 页面上一共消除的块的个数
+  score: 游戏结束的得分
+time: 60
+2.实现最基本的样式
+  遍历一个长度为12的数组blocks，数组的每一项block包含color，isShow，isShowBlock三个属性。
+  遍历得到12个6种颜色两两颜色相同的div。每个div的显示由
+	color: 'red',
+        isShow: false,
+        isShowBlock: true
+  三种属性决定最终在页面上的显示结果。isShowBlock控制每个块是否显示，
+  每个块里面包含两个子块，一个子块的颜色为初始颜色gray,另一个块的颜色由color决定。
+  两个子块只会显示其中一个，通过isShow属性决定。其中一个为isShow则另一个就为!isShow。
+  初始化的时候所有块显示的颜色都为gray（代表卡牌的背面）
+3.打乱数组的顺序（实现不同颜色块的随机排列）
+  打乱数组的顺序在这里我采用的是sort((a, b) => { return a > b ? 1 : -1 })方法。
+4.实现具体的代码逻辑
+  通过count来控制是否可以点击。count初始值为0，
+  每点击一次，count的值增加1，count值小于2时页面上的块才能点击。
+  count小于2时点击块，都会把块的isShow属性设置为true来显示块的正面，
+  并且当count为1时，将点击块的属性赋值给firstBlock，
+  当count为2时，将点击块的属性赋值给currentBlock。然后比较firstBlock.color与currentBlock.color的值，如果相等
+  将firstBlock.isShowBlock和currentBlock.isShowBlock设置为false，allCount的值增加2，score增加160，count设置为0。
+  此时页面上的两个正面朝上的块将会消失。如果不相等
+  则将currentBlock.isShow 设置为false,firstBlock.isShow设置为false,count设置为0。此时两个正面朝上的块都会变成背面朝上。
+5.控制游戏的结束
+ 通过setTimeout实现time的递减，time的初始值为60，当time等于0或者allCount为12时游戏结束。
+6.块翻转动画的实现
+ transform: perspective(600px) rotateX(180deg)到transform: perspective(600px) rotateX(0)的角度变化
+ 结合backface-visibility: hidden;实现翻转动画。
+  
